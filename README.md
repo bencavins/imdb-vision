@@ -11,3 +11,6 @@ cd imdb-vision-backend/datasets
 ./get_datasets.sh
 ```
 The datasets will be downloaded into the folder
+
+## To create the database
+`flask db upgrade head`

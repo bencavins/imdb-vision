@@ -163,3 +163,7 @@ cython_debug/
 name.basics.tsv*
 title.episode.tsv*
 title.ratings.tsv*
+title.basics.tsv*
+
+# ENV file
+.env

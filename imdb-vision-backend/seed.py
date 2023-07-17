@@ -3,16 +3,28 @@ import csv
 from app import app
 from models import db
 from models.tv_series import TVSeries
+from models.episode import Episode
 
 
 tv_series_tsv_path = 'datasets/title.basics.tsv'
+episode_tsv_path = 'datasets/title.episode.tsv'
 
 
-with app.app_context():
-    TVSeries.query.delete()
+def main():
+    with app.app_context():
+        TVSeries.query.delete()
+        Episode.query.delete()
 
-    # Loop through the TSV file with TV Series data
-    count = 0
+        print("Loading TV Series...")
+        load_tv_series()
+        print("Loading Episodes...")
+        load_episodes()
+
+
+def load_tv_series():
+    """
+    Loop through the TSV file with TV Series data and save in DB.
+    """
     with open(tv_series_tsv_path, 'r') as f:
         reader = csv.reader(f, delimiter='\t')
         for row in reader:
@@ -30,4 +42,26 @@ with app.app_context():
                     genres=row[8] if row[8] != '\\N' else None,
                 )
                 db.session.add(tv_series)
-        db.session.commit()
+    db.session.commit()
+
+
+def load_episodes():
+    with open(episode_tsv_path, 'r') as f:
+        reader = csv.reader(f, delimiter='\t')
+        for row in reader:
+            # row[0] == tconst
+            # row[1] == parentTconst
+            # row[2] == seasonNumber
+            # row[3] == episodeNumber
+            episode = Episode(
+                imdb_id=row[0],
+                parent_imdb_id=row[1],
+                season_number=row[2] if row[2] != '\\N' else None,
+                episode_number=row[3] if row[3] != '\\N' else None,
+            )
+            db.session.add(episode)
+    db.session.commit()
+
+
+if __name__ == '__main__':
+    main()

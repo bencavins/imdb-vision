@@ -3,6 +3,7 @@ from flask_migrate import Migrate
 
 from models import db
 from models.tv_series import TVSeries
+from models.episode import Episode
 
 
 app = Flask(__name__)

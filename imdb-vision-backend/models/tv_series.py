@@ -5,7 +5,7 @@ class TVSeries(db.Model):
     __tablename__ = 'tv_series'
 
     id = db.Column(db.Integer, primary_key=True)
-    imdb_id = db.Column(db.String, unique=True)
+    imdb_id = db.Column(db.String, unique=True, index=True)
     primary_title = db.Column(db.String, nullable=False)
     original_title = db.Column(db.String)
     is_adult = db.Column(db.Boolean, default=False)

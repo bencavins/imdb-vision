@@ -10,5 +10,7 @@ class Episode(db.Model):
     season_number = db.Column(db.Integer)
     episode_number = db.Column(db.Integer)
 
+    rating = db.relationship('Rating', uselist=False, backref='episode')
+
     def __repr__(self):
         return f"<Episode {self.imdb_id} {self.parent_imdb_id} {self.season_number} {self.episode_number}>"

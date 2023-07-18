@@ -14,6 +14,8 @@ class TVSeries(db.Model):
     runtime = db.Column(db.Integer)
     genres = db.Column(db.String)
 
+    episodes = db.relationship('Episode', backref='tv_series')
+
     def to_dict(self):
         return {
             'id': self.id,

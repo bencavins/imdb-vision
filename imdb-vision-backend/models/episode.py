@@ -1,8 +1,12 @@
+from sqlalchemy_serializer import SerializerMixin
+
 from models import db
 
 
-class Episode(db.Model):
+class Episode(db.Model, SerializerMixin):
     __tablename__ = 'episodes'
+
+    serialize_rules = ('-rating.episode', '-tv_series.episodes')
 
     id = db.Column(db.Integer, primary_key=True)
     imdb_id = db.Column(db.String, nullable=False, index=True)

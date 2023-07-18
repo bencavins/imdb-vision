@@ -19,3 +19,14 @@ migrate = Migrate(app, db)
 @app.get('/')
 def get_root():
     return '<h1>HELLO</h1>'
+
+@app.get('/tv_series/<int:id>')
+def get_tv_series_by_id(id):
+    tv = TVSeries.query.filter(
+        TVSeries.id == id
+    ).first()
+
+    if not tv:
+        return {'error': 'Invalid ID'}, 404
+    
+    return tv.to_dict(), 200

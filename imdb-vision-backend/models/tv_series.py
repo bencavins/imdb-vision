@@ -1,8 +1,12 @@
+from sqlalchemy_serializer import SerializerMixin
+
 from models import db
 
 
-class TVSeries(db.Model):
+class TVSeries(db.Model, SerializerMixin):
     __tablename__ = 'tv_series'
+
+    serialize_rules = ('-episodes.tv_series',)
 
     id = db.Column(db.Integer, primary_key=True)
     imdb_id = db.Column(db.String, unique=True, index=True)
@@ -15,12 +19,6 @@ class TVSeries(db.Model):
     genres = db.Column(db.String)
 
     episodes = db.relationship('Episode', backref='tv_series')
-
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'imdb_id': self.imdb_id,
-        }
 
     def __repr__(self):
         return f"<Show {self.imdb_id} {self.primary_title}>"

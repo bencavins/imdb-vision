@@ -9,6 +9,8 @@ from models.episode import Episode
 tv_series_tsv_path = 'datasets/title.basics.tsv'
 episode_tsv_path = 'datasets/title.episode.tsv'
 
+chunk_size = 1000
+
 
 def main():
     with app.app_context():
@@ -48,6 +50,10 @@ def load_tv_series():
 def load_episodes():
     with open(episode_tsv_path, 'r') as f:
         reader = csv.reader(f, delimiter='\t')
+        # skip header
+        next(reader)
+
+        batch = []
         for row in reader:
             # row[0] == tconst
             # row[1] == parentTconst
@@ -59,7 +65,13 @@ def load_episodes():
                 season_number=row[2] if row[2] != '\\N' else None,
                 episode_number=row[3] if row[3] != '\\N' else None,
             )
-            db.session.add(episode)
+            batch.append(episode)
+
+            # bulk updates to save memory
+            # can switch to bulk_insert_mappings if need better performance
+            if len(batch) >= chunk_size:
+                db.session.bulk_save_objects(batch)
+                batch = []
     db.session.commit()
 
 

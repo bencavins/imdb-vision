@@ -5,9 +5,9 @@ export default function SeriesGrid({ series }) {
   const tdHeader = []
   for (let i = 0; i <= maxRowLength(series.episodes); i++) {
     if (i === 0) {
-      tdHeader.push(<td>Season</td>)
+      tdHeader.push(<th>Season</th>)
     } else {
-      tdHeader.push(<td>E{i}</td>)
+      tdHeader.push(<th>E{i}</th>)
     }
   }
 
@@ -15,7 +15,9 @@ export default function SeriesGrid({ series }) {
     <div id="series-grid">
       <table>
         <thead>
-          {tdHeader}
+          <tr>
+            {tdHeader}
+          </tr>
         </thead>
         <tbody>
           {series.episodes.map(row => <SeriesGridRow rowData={row} />)}

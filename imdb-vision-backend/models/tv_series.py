@@ -18,7 +18,11 @@ class TVSeries(db.Model, SerializerMixin):
     runtime = db.Column(db.Integer)
     genres = db.Column(db.String)
 
-    episodes = db.relationship('Episode', backref='tv_series')
+    episodes = db.relationship(
+        'Episode', 
+        backref='tv_series',
+        order_by='Episode.season_number, Episode.episode_number'
+    )
 
     def __repr__(self):
         return f"<Show {self.imdb_id} {self.primary_title}>"

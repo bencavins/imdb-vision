@@ -9,7 +9,24 @@ export default function Show() {
   useEffect(() => {
     fetch(`http://localhost:5555/tv_series/${id}`)
     .then(resp => resp.json())
-    .then(data => setSeries(data))
+    .then(data => {
+      // turn episode array into matrix
+      const episodes = []
+      let row = []
+      let seasonNum = data.episodes[0].season_number
+      data.episodes.forEach(episode => {
+        if (episode.season_number !== seasonNum) {
+          episodes.push(row)
+          row = []
+          seasonNum = episode.season_number
+        }
+        row.push(episode)
+      })
+      episodes.push(row)
+      data.episodes = episodes
+      setSeries(data)
+      console.log(data)
+    })
   }, [])
 
   if (JSON.stringify(series) === '{}') {

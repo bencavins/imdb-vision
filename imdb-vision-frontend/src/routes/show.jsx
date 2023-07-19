@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 
+import SeriesGrid from "../components/SeriesGrid"
+
 export default function Show() {
   const [series, setSeries] = useState({})
 
@@ -36,7 +38,7 @@ export default function Show() {
   return (
     <>
       <h1>{series.primary_title}</h1>
-      <h2>Grid goes here</h2>
+      <SeriesGrid series={series} />
     </>
   )
 }

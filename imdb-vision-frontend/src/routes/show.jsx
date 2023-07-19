@@ -26,8 +26,8 @@ export default function Show() {
       })
       episodes.push(row)
       data.episodes = episodes
+      
       setSeries(data)
-      console.log(data)
     })
   }, [])
 

@@ -3,6 +3,7 @@ import os
 from flask import Flask
 from flask_migrate import Migrate
 from flask_cors import CORS
+from dotenv import dotenv_values
 
 from models import db
 from models.title import Title
@@ -10,10 +11,12 @@ from models.episode import Episode
 from models.rating import Rating
 
 
+env_values = dotenv_values()
+
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = ''
+app.config['SQLALCHEMY_DATABASE_URI'] = env_values.get('TEST_DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.json.compact = False
+app.json.compact = True
 
 db.init_app(app)
 migrate = Migrate(app, db)

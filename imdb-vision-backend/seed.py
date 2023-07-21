@@ -18,8 +18,6 @@ reader_kwargs = {
     'quotechar': None,
 }
 
-# app.config.from_dotenv('.env')
-
 # short
 # titleType
 # tvMiniSeries
@@ -36,18 +34,20 @@ reader_kwargs = {
 
 def main():
     with app.app_context():
-        print("Loading TV Series")
+        print('Dropping data')
+        Rating.query.delete()
+        Episode.query.delete()
         Title.query.delete()
+
+        print("Loading Titles")
         load_tv_series()
         print()
 
         print("Loading Episodes")
-        Episode.query.delete()
         load_episodes()
         print()
 
         print('Loading Ratings')
-        Rating.query.delete()
         load_ratings()
         print()
 
@@ -81,6 +81,7 @@ def load_tv_series():
             batch.append(tv_series)
 
             if len(batch) >= chunk_size:
+                print('.', end='', flush=True)
                 db.session.bulk_save_objects(batch)
                 batch = []
         db.session.bulk_save_objects(batch)
@@ -110,10 +111,9 @@ def load_episodes():
             # bulk updates to save memory
             # can switch to bulk_insert_mappings if need better performance
             if len(batch) >= chunk_size:
-                print('.', end='')
+                print('.', end='', flush=True)
                 db.session.bulk_save_objects(batch)
                 batch = []
-                count += 1
         db.session.bulk_save_objects(batch)
     db.session.commit()
 
@@ -142,9 +142,9 @@ def load_ratings():
             batch.append(rating)
 
             if len(batch) >= chunk_size:
+                print('.', end='', flush=True)
                 db.session.bulk_save_objects(batch)
                 batch = []
-                print('.', end='')
         db.session.bulk_save_objects(batch)
     db.session.commit()
 

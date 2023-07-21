@@ -1,15 +1,17 @@
+import os
+
 from flask import Flask
 from flask_migrate import Migrate
 from flask_cors import CORS
 
 from models import db
-from models.tv_series import TVSeries
+from models.title import Title
 from models.episode import Episode
 from models.rating import Rating
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = ''
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 
@@ -24,8 +26,8 @@ def get_root():
 
 @app.get('/tv_series/<int:id>')
 def get_tv_series_by_id(id):
-    tv = TVSeries.query.filter(
-        TVSeries.id == id
+    tv = Title.query.filter(
+        Title.id == id
     ).first()
 
     if not tv:

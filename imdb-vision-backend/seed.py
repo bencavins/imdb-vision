@@ -2,7 +2,7 @@ import csv
 
 from app import app
 from models import db
-from models.tv_series import TVSeries
+from models.title import Title
 from models.episode import Episode
 from models.rating import Rating
 
@@ -11,20 +11,45 @@ tv_series_tsv_path = 'datasets/title.basics.tsv'
 episode_tsv_path = 'datasets/title.episode.tsv'
 ratings_tsv_path = 'datasets/title.ratings.tsv'
 
-chunk_size = 1000  # for batch inserts
+chunk_size = 10000  # for batch inserts
+
+reader_kwargs = {
+    'delimiter': '\t',
+    'quotechar': None,
+}
+
+# app.config.from_dotenv('.env')
+
+# short
+# titleType
+# tvMiniSeries
+# tvSpecial
+# tvEpisode
+# video
+# tvMovie
+# tvSeries
+# videoGame
+# tvShort
+# tvPilot
+# movie
 
 
 def main():
     with app.app_context():
-        print("Loading TV Series...")
-        TVSeries.query.delete()
+        print("Loading TV Series")
+        Title.query.delete()
         load_tv_series()
-        print("Loading Episodes...")
+        print()
+
+        print("Loading Episodes")
         Episode.query.delete()
         load_episodes()
-        print('Loading Ratings...')
+        print()
+
+        print('Loading Ratings')
         Rating.query.delete()
         load_ratings()
+        print()
 
 
 def load_tv_series():
@@ -32,28 +57,39 @@ def load_tv_series():
     Loop through the TSV file with TV Series data and save in DB.
     """
     with open(tv_series_tsv_path, 'r') as f:
-        reader = csv.reader(f, delimiter='\t')
+        reader = csv.reader(f, **reader_kwargs)  # using a ~ for the quote char cuz the default (") was causing problems
+        next(reader) # skip header
+
+        batch = []
         for row in reader:
             # Header should look like this:
             # tconst, titleType, primaryTitle, originalTitle, isAdult, startYear, endYear, runtimeMinutes, genres
-            if row[1] == 'tvSeries':  # make sure this is a tv series (movies and shorts are in the dataset too)
-                tv_series = TVSeries(
-                    imdb_id=row[0],
-                    primary_title=row[2],
-                    original_title=row[3],
-                    is_adult=True if row[4] == '1' else False,
-                    start_year=row[5],
-                    end_year=row[6] if row[6] != '\\N' else None,
-                    runtime=row[7] if row[7] != '\\N' else None,
-                    genres=row[8] if row[8] != '\\N' else None,
-                )
-                db.session.add(tv_series)
-    db.session.commit()
+            if row[1] not in ['tvMiniSeries', 'tvSpecial', 'tvEpisode', 'tvSeries', 'tvShort', 'tvPilot', 'tvMovie']:
+                continue
 
+            tv_series = Title(
+                imdb_id=row[0],
+                type=row[1], 
+                primary_title=row[2],
+                original_title=row[3],
+                is_adult=True if row[4] == '1' else False,
+                start_year=row[5],
+                end_year=row[6] if row[6] != '\\N' else None,
+                runtime=row[7] if row[7] != '\\N' else None,
+                genres=row[8] if row[8] != '\\N' else None,
+            )
+            batch.append(tv_series)
+
+            if len(batch) >= chunk_size:
+                db.session.bulk_save_objects(batch)
+                batch = []
+        db.session.bulk_save_objects(batch)
+
+    db.session.commit()
 
 def load_episodes():
     with open(episode_tsv_path, 'r') as f:
-        reader = csv.reader(f, delimiter='\t')
+        reader = csv.reader(f, **reader_kwargs)
         # skip header
         next(reader)
 
@@ -74,14 +110,19 @@ def load_episodes():
             # bulk updates to save memory
             # can switch to bulk_insert_mappings if need better performance
             if len(batch) >= chunk_size:
+                print('.', end='')
                 db.session.bulk_save_objects(batch)
                 batch = []
+                count += 1
+        db.session.bulk_save_objects(batch)
     db.session.commit()
 
 
 def load_ratings():
+    # all_ep_ids = Episode.query.with_entities(Episode.imdb_id).all()
+
     with open(ratings_tsv_path, 'r') as f:
-        reader = csv.reader(f, delimiter='\t')
+        reader = csv.reader(f, **reader_kwargs)
         next(reader)  # skip header 
 
         batch = []
@@ -89,6 +130,10 @@ def load_ratings():
             # row[0] == tconst
             # row[1] == averageRating
             # row[2] == numVotes
+            ep = Episode.query.filter(Episode.imdb_id == row[0]).first()
+            if not ep:
+                continue
+
             rating = Rating(
                 imdb_id=row[0],
                 average_rating=row[1],
@@ -99,6 +144,8 @@ def load_ratings():
             if len(batch) >= chunk_size:
                 db.session.bulk_save_objects(batch)
                 batch = []
+                print('.', end='')
+        db.session.bulk_save_objects(batch)
     db.session.commit()
 
 

@@ -9,8 +9,8 @@ class Episode(db.Model, SerializerMixin):
     serialize_rules = ('-rating.episode', '-tv_series.episodes')
 
     id = db.Column(db.Integer, primary_key=True)
-    imdb_id = db.Column(db.String, nullable=False, index=True)
-    parent_imdb_id = db.Column(db.String, db.ForeignKey('tv_series.imdb_id'), nullable=False)
+    imdb_id = db.Column(db.String, nullable=False, index=True, unique=True)
+    parent_imdb_id = db.Column(db.String, db.ForeignKey('titles.imdb_id'), nullable=False)
     season_number = db.Column(db.Integer)
     episode_number = db.Column(db.Integer)
 

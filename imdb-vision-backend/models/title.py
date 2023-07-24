@@ -3,12 +3,13 @@ from sqlalchemy_serializer import SerializerMixin
 from models import db
 
 
-class TVSeries(db.Model, SerializerMixin):
-    __tablename__ = 'tv_series'
+class Title(db.Model, SerializerMixin):
+    __tablename__ = 'titles'
 
     serialize_rules = ('-episodes.tv_series',)
 
     id = db.Column(db.Integer, primary_key=True)
+    type = db.Column(db.String)
     imdb_id = db.Column(db.String, unique=True, index=True)
     primary_title = db.Column(db.String, nullable=False)
     original_title = db.Column(db.String)

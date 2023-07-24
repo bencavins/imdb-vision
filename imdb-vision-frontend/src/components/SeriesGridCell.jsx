@@ -13,7 +13,7 @@ export default function SeriesGridCell({ data }) {
   }
 
   const style = {
-    "background-color": color
+    backgroundColor: color
   }
   
   return (

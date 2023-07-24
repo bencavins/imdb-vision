@@ -35,9 +35,9 @@ reader_kwargs = {
 def main():
     with app.app_context():
         print('Dropping data')
-        Rating.query.delete()
-        Episode.query.delete()
-        Title.query.delete()
+        db.session.execute(Rating.delete())
+        db.session.execute(Episode.delete())
+        db.session.execute(Title.delete())
 
         print("Loading Titles")
         load_tv_series()
@@ -119,8 +119,6 @@ def load_episodes():
 
 
 def load_ratings():
-    # all_ep_ids = Episode.query.with_entities(Episode.imdb_id).all()
-
     with open(ratings_tsv_path, 'r') as f:
         reader = csv.reader(f, **reader_kwargs)
         next(reader)  # skip header 

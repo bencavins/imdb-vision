@@ -30,13 +30,6 @@ export default function SeriesGridCell({ data }) {
 
   if (!data.rating) {
     color = "gray"
-//   } else if (data.rating.average_rating < 7.0) {
-//     color = "red"
-//   } else if (data.rating.average_rating < 8.0) {
-//     color = "yellow"
-//   } else {
-//     color = "green"
-//   }
   } else if (data.rating.average_rating <= 5) {
     color = red
   } else if (data.rating.average_rating <= 7) {

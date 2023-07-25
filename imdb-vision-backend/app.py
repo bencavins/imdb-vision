@@ -4,6 +4,7 @@ from flask import Flask
 from flask_migrate import Migrate
 from flask_cors import CORS
 from dotenv import dotenv_values
+from fuzzywuzzy import fuzz
 
 from models import db
 from models.title import Title
@@ -47,7 +48,12 @@ def get_tv_series_by_title(title):
 
     data = [s.to_dict(rules=('-episodes',)) for s in series]
 
-    return data, 200
+    # use Levenstein matching to score each title
+    for series in data:
+        series['score'] = fuzz.WRatio(series['primary_title'], title)
+
+    # sort data based on the score
+    return sorted(data, key=lambda series: series['score'], reverse=True), 200
 
 @app.get('/tv_series/<int:id>')
 def get_tv_series_by_id(id):

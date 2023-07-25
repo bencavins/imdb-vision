@@ -4,9 +4,11 @@ import SearchResults from "./SearchResults"
 
 export default function Search() {
   const [search, setSearch] = useState("")
+  const [results, setResults] = useState()
 
   function handleSubmit(event) {
     event.preventDefault()
+    setResults(undefined)
     setSearch(event.target.search.value)
   }
 
@@ -17,7 +19,7 @@ export default function Search() {
         <input type="text" name="search" />
         <input type="submit" />
       </form>
-      {search ? <SearchResults search={search} /> : null}
+      {search ? <SearchResults search={search} results={results} setResults={setResults} /> : null}
     </>
   )
 }

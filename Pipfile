@@ -11,6 +11,8 @@ python-dotenv = "*"
 sqlalchemy-serializer = "*"
 flask-cors = "*"
 psycopg2-binary = "*"
+fuzzywuzzy = "*"
+python-levenshtein = "*"
 
 [dev-packages]
 

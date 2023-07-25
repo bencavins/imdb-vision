@@ -27,6 +27,28 @@ CORS(app)
 def get_root():
     return '<h1>HELLO</h1>'
 
+@app.get('/tv_series')
+def get_all_tv_series():
+    series = Title.query.filter(
+        Title.type == 'tvSeries'
+    ).all()
+
+    data = [s.to_dict(rules=('-episodes',)) for s in series]
+
+    return data, 200
+
+@app.get('/tv_series/<string:title>')
+def get_tv_series_by_title(title):
+    series = Title.query.filter(
+        Title.type == 'tvSeries'
+    ).filter(
+        Title.primary_title == title
+    ).all()
+
+    data = [s.to_dict(rules=('-episodes',)) for s in series]
+
+    return data, 200
+
 @app.get('/tv_series/<int:id>')
 def get_tv_series_by_id(id):
     tv = Title.query.filter(

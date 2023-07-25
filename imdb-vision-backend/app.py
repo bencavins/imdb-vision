@@ -42,7 +42,7 @@ def get_tv_series_by_title(title):
     series = Title.query.filter(
         Title.type == 'tvSeries'
     ).filter(
-        Title.primary_title == title
+        Title.primary_title.ilike(f"%{title}%")
     ).all()
 
     data = [s.to_dict(rules=('-episodes',)) for s in series]

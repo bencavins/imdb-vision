@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
-export default function SearchResults({ search }) {
-  const [results, setResults] = useState()
+export default function SearchResults({ search, results, setResults }) {
 
   useEffect(() => {
     fetch(`http://localhost:5555/tv_series/${search}`)

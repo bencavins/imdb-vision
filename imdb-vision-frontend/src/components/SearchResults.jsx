@@ -20,7 +20,7 @@ export default function SearchResults({ search }) {
 
   return (
     <div id="search-results">
-      {results.map(result => <Link to={`show/${result.id}`} key={result.id}>{result.primary_title} {result.start_year}-{result.end_year}</Link>)}
+      {results.map(result => <Link to={`show/${result.id}`} key={result.id} reloadDocument="true">{result.primary_title} {result.start_year}-{result.end_year}</Link>)}
     </div>
   )
 }

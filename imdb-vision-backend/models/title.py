@@ -7,7 +7,7 @@ from models.episode import Episode
 class Title(db.Model, SerializerMixin):
     __tablename__ = 'titles'
 
-    serialize_rules = ('-episodes.tv_series',)
+    serialize_rules = ('-episodes.tv_series', '-episodes.title')
 
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String)

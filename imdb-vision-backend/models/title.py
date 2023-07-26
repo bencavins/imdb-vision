@@ -1,6 +1,7 @@
 from sqlalchemy_serializer import SerializerMixin
 
 from models import db
+from models.episode import Episode
 
 
 class Title(db.Model, SerializerMixin):
@@ -21,7 +22,7 @@ class Title(db.Model, SerializerMixin):
 
     episodes = db.relationship(
         'Episode', 
-        # backref='tv_series',
+        foreign_keys=[Episode.parent_imdb_id],
         back_populates='tv_series',
         order_by='Episode.season_number, Episode.episode_number'
     )

@@ -9,12 +9,13 @@ class Episode(db.Model, SerializerMixin):
     serialize_rules = ('-rating.episode', '-tv_series.episodes')
 
     id = db.Column(db.Integer, primary_key=True)
-    imdb_id = db.Column(db.String, nullable=False, index=True, unique=True)
+    imdb_id = db.Column(db.String, db.ForeignKey('titles.imdb_id'), nullable=False, index=True, unique=True)
     parent_imdb_id = db.Column(db.String, db.ForeignKey('titles.imdb_id'), nullable=False)
     season_number = db.Column(db.Integer)
     episode_number = db.Column(db.Integer)
 
-    tv_series = db.relationship('Title', back_populates='episodes', uselist=False)
+    tv_series = db.relationship('Title', foreign_keys=[parent_imdb_id], back_populates='episodes', uselist=False)
+    title = db.relationship('Title', foreign_keys=[imdb_id], uselist=False)
     rating = db.relationship('Rating', uselist=False, backref='episode')
 
     def __repr__(self):

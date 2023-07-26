@@ -14,7 +14,11 @@ from models.rating import Rating
 
 env_values = dotenv_values()
 
-app = Flask(__name__)
+app = Flask(
+    __name__, 
+    static_folder='../imdb-vision-frontend/dist',
+    static_url_path='/'
+)
 app.config['SQLALCHEMY_DATABASE_URI'] = env_values.get('TEST_DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = True
@@ -24,9 +28,13 @@ migrate = Migrate(app, db)
 CORS(app)
 
 
-@app.get('/')
-def get_root():
-    return '<h1>HELLO</h1>'
+@app.route('/')
+def index():
+    return app.send_static_file('index.html')
+
+@app.errorhandler(404)
+def not_found(e):
+    return app.send_static_file('index.html')
 
 @app.get('/tv_series')
 def get_all_tv_series():

@@ -1,0 +1,1 @@
+web: gunicorn --bind 127.0.0.1:5555 --pythonpath imdb-vision-backend app:app

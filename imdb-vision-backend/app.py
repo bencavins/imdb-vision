@@ -19,7 +19,7 @@ app = Flask(
     static_folder='../imdb-vision-frontend/dist',
     static_url_path='/'
 )
-app.config['SQLALCHEMY_DATABASE_URI'] = env_values.get('TEST_DATABASE_URI')
+app.config['SQLALCHEMY_DATABASE_URI'] = env_values.get('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = True
 

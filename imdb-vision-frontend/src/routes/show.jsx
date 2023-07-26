@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 
 import SeriesGrid from "../components/SeriesGrid"
+import "./show.css"
 
 export default function Show() {
   const [series, setSeries] = useState({})
@@ -32,12 +33,12 @@ export default function Show() {
   }, [])
 
   if (JSON.stringify(series) === '{}') {
-    return <h1>Loading...</h1>
+    return <p>Loading Series Info...</p>
   }
 
   return (
     <>
-      <h1>{series.primary_title}</h1>
+      <h2>{series.primary_title}</h2>
       <SeriesGrid series={series} />
     </>
   )

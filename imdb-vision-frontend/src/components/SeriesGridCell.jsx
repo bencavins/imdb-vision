@@ -47,6 +47,10 @@ export default function SeriesGridCell({ data }) {
   }
   
   return (
-    <td style={style}>{data.rating ? data.rating.average_rating : "N/A"}</td>
+    <td style={style}>
+      <a href={`http://www.imdb.com/title/${data.imdb_id}`} target="_blank">
+        {data.rating ? data.rating.average_rating : "N/A"}
+      </a>
+    </td>
   )
 }

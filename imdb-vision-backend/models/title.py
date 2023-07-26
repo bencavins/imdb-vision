@@ -21,7 +21,8 @@ class Title(db.Model, SerializerMixin):
 
     episodes = db.relationship(
         'Episode', 
-        backref='tv_series',
+        # backref='tv_series',
+        back_populates='tv_series',
         order_by='Episode.season_number, Episode.episode_number'
     )
 

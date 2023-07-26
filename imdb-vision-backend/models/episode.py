@@ -14,6 +14,7 @@ class Episode(db.Model, SerializerMixin):
     season_number = db.Column(db.Integer)
     episode_number = db.Column(db.Integer)
 
+    tv_series = db.relationship('Title', back_populates='episodes', uselist=False)
     rating = db.relationship('Rating', uselist=False, backref='episode')
 
     def __repr__(self):

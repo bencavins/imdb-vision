@@ -35,9 +35,9 @@ reader_kwargs = {
 def main():
     with app.app_context():
         print('Dropping data')
-        db.session.execute(Rating.delete())
-        db.session.execute(Episode.delete())
-        db.session.execute(Title.delete())
+        Rating.query.delete()
+        Episode.query.delete()
+        Title.query.delete()
 
         print("Loading Titles")
         load_tv_series()

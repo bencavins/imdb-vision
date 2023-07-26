@@ -1,12 +1,13 @@
 from sqlalchemy_serializer import SerializerMixin
 
 from models import db
+from models.episode import Episode
 
 
 class Title(db.Model, SerializerMixin):
     __tablename__ = 'titles'
 
-    serialize_rules = ('-episodes.tv_series',)
+    serialize_rules = ('-episodes.tv_series', '-episodes.title')
 
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String)
@@ -21,7 +22,8 @@ class Title(db.Model, SerializerMixin):
 
     episodes = db.relationship(
         'Episode', 
-        backref='tv_series',
+        foreign_keys=[Episode.parent_imdb_id],
+        back_populates='tv_series',
         order_by='Episode.season_number, Episode.episode_number'
     )
 

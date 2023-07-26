@@ -1,1 +1,1 @@
-web: gunicorn --bind 0.0.0.0:80 --pythonpath imdb-vision-backend app:app
+web: gunicorn --pythonpath imdb-vision-backend app:app -t 120

@@ -7,9 +7,15 @@ npm run dev
 ```
 
 ## Starting the Backend
+For development:
 ```
 cd imdb_vision_backend
 flask run
+```
+
+You can also start with gunicorn:
+```
+gunicorn --bind 127.0.0.1:5555 --pythonpath imdb-vision-backend app:app
 ```
 
 ## Where the data comes from

@@ -30,6 +30,8 @@ body {
   /* place-items: center; */
   min-width: 320px;
   min-height: 100vh;
+
+  background-image: linear-gradient(to right bottom, #fffff5, #fcfde4, #f9fad2, #f6f8c1, #f3f5af, #eef09e, #eaec8d, #e5e77b, #dedf65, #d8d74e, #d1cf32, #cbc700);
 }
 
 h1 {
@@ -72,3 +74,4 @@ button:focus-visible {
 table, th, td {
   border: 1px solid black;
 }
+

@@ -1,5 +1,7 @@
 # IMDB TV Show Rating Visualizer
 
+![image](./mainpage.png)
+
 ## Starting the Frontend
 ```
 cd imdb_vision_frontend

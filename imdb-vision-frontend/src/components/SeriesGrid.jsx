@@ -1,4 +1,5 @@
 import SeriesGridRow from "./SeriesGridRow"
+import "./SeriesGrid.css"
 
 export default function SeriesGrid({ series }) {
 
